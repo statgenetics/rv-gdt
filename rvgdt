@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+#
+# File: rvgdt.py
+#
+__author__ = "Zongxiao He"
+__copyright__ = "Copyright 2015 Zongxiao He"
+__date__ = "11/5/15"
+
+import argparse
+import sys
+import textwrap
+from RVGDT.rvdt_utilities import *
+from RVGDT.disequilibrium_test import *
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description = """Rare Variant Extesnion of the Generalized Disequilibrium Test""",
+		                                    epilog = textwrap.dedent("""
+                                            Copyright: Zongxiao He (zongxiah@bcm.edu) and Suzanne Leal (sleal@bcm.edu)
+                                            Required Environment: Python 2.7 + SciPy 0.16 or Anaconda 2.3
+                                            Please cite XXXX if you find variant tools helpful and use it in your publication.
+                                            """),
+                                            prog = 'rvgdt',
+                                            usage='%(prog)s [-h] {ped}',
+                                            formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+
+    parser.add_argument('proj', help="Name of the project")
+    parser.add_argument('--geno', required=True, type=str, help="genotype file")
+    parser.add_argument('--ped', required=True, type=str, help="pedigree file")
+    parser.add_argument('--weight', type=str, help='weights for variants')
+
+    # rvdt options
+    parser.add_argument('--maf_cutoff', default=1, type=float, help="MAF cutoff, MAF was calculated in founders")
+    parser.add_argument('--adapt_iter', default=500, type=int, help="Adaptive permutation")
+    parser.add_argument('--max_iter', default=1000, type=int, help="Max number of iterations")
+    parser.add_argument('--alpha', default=0.05, type=float, help="Alpha level")
+
+    # missing cofunder
+    parser.add_argument('--unweighted', action='store_true', help="include unweighted test in analysis")
+    parser.add_argument('--use_vt', action='store_true', help="using vt approach in analysis")
+    parser.add_argument('--analytical', action='store_true', help="include analytical p value in analysis")
+    parser.add_argument('--vpdt', action='store_true', help="run vPDT")
+
+    parser.add_argument('--remove_subject', default=None, help="remove given subjects")
+    # parser.add_argument('--remove_family', default=None, help="remove given family")
+    #
+
+    # parse arguments
+    args = parser.parse_args()
+    try:
+        sid2geno = read_genofile(args.geno)
+        if args.weight is not None:
+            var_weights = read_weights(args.weight)
+        else:
+            var_weights = None
+
+        if var_weights is not None and len(sid2geno.values()[0]) != len(var_weights):
+            sys.exit("Number of variant in genotype file and weight file don't match!")
+
+        if args.remove_subject is not None:
+            sid2geno_new = {}
+            sid_to_remove = set([i.strip() for i in open(args.remove_subject).readlines()])
+            for sid in sid2geno:
+                if sid in sid_to_remove:
+                    continue
+                sid2geno_new[sid] = sid2geno[sid]
+            sid2geno = sid2geno_new
+
+        peds = read_pedfile(args.ped)
+        model = DisequilibriumTest(peds, sid2geno, None, var_weights)
+
+        model.set_test_options(args)
+        tests, pvals =  model.analyze()
+
+        if tests is not None:
+            with open(args.proj + ".rvdt_output", 'w') as outfile:
+                for t, p in zip(tests, pvals):
+                    outfile.write("{0}\t{1}\t{2}\n".format(args.proj, t, p))
+    except Exception as e:
+        print e
+        sys.exit()
