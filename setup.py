@@ -19,7 +19,7 @@ import sys, os
 try:
     import argparse, scipy
 except ImportError:
-    sys.exit('The program requires Python 2.7 + SciPy 0.16 or Anaconda 2.3.')
+    sys.exit('The program requires Python 2.7 + NumPy 1.11 + SciPy 0.16 or Anaconda 2.3.')
 #
 setup(name = 'RVGDT',
     version='1.0',

@@ -16,11 +16,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = """Rare Variant Extesnion of the Generalized Disequilibrium Test""",
 		                                    epilog = textwrap.dedent("""
                                             Copyright: Zongxiao He (zongxiah@bcm.edu) and Suzanne Leal (sleal@bcm.edu)
-                                            Required Environment: Python 2.7 + SciPy 0.16 or Anaconda 2.3
+                                            Required Environment: Python 2.7 + NumPy 1.11 + SciPy 0.16 or Anaconda 2.3
                                             Please cite XXXX if you find variant tools helpful and use it in your publication.
                                             """),
                                             prog = 'rvgdt',
-                                            usage='%(prog)s [-h] {ped}',
+                                            usage='%(prog)s [-h]',
                                             formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
 
@@ -38,8 +38,8 @@ if __name__ == '__main__':
     # missing cofunder
     parser.add_argument('--unweighted', action='store_true', help="include unweighted test in analysis")
     parser.add_argument('--use_vt', action='store_true', help="using vt approach in analysis")
-    parser.add_argument('--analytical', action='store_true', help="include analytical p value in analysis")
-    parser.add_argument('--vpdt', action='store_true', help="run vPDT")
+    parser.add_argument('--analytical', action='store_true', help=argparse.SUPPRESS) #help="include analytical p value in analysis")
+    parser.add_argument('--vpdt', action='store_true', help=argparse.SUPPRESS) #, help="run vPDT")
 
     parser.add_argument('--remove_subject', default=None, help="remove given subjects")
     # parser.add_argument('--remove_family', default=None, help="remove given family")
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         tests, pvals =  model.analyze()
 
         if tests is not None:
-            with open(args.proj + ".rvdt_output", 'w') as outfile:
+            with open(args.proj + ".rvgdt_output", 'w') as outfile:
                 for t, p in zip(tests, pvals):
                     outfile.write("{0}\t{1}\t{2}\n".format(args.proj, t, p))
     except Exception as e:
