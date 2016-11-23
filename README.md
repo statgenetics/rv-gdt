@@ -80,10 +80,6 @@ Any data given from column 7 will be considered as covariates. An example pedigr
 
 ### Optional Files
 
-#### Ungenotyped Subjects
-
-The full pedigree structure needs to be given in the pedigree file, even if some subjects don't have genotype information. The subjects who are not genotyped are given in a separate single-column file (no header), in which each line is the subject id.
-
 #### Weight File
 
 In case you want to weight each variant differently. The weights can be given in a single-column file (no header), in which each line is the weight for the corresponding variant site (the order should be the same as the order of variant sites in genotype file).
