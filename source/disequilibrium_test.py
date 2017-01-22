@@ -154,7 +154,7 @@ class DisequilibriumTest(object):
         else:
             tests, pvals = self.rvgdt()
 
-        if pvals is  None:
+        if pvals is None:
             pvals = ['none' for t in tests]
 
         return tests, pvals
@@ -698,12 +698,11 @@ class DisequilibriumTest(object):
                     sij = d if sij is None else map(operator.add, sij, d)
                     # print d, sij
 
-            if has_covariates is False:
-                sij = [s * 1.0 / Ni for s in sij]
-
             if sij is None:
                 continue
             else:
+                if has_covariates is False:
+                    sij = [s * 1.0 / Ni for s in sij]
                 Sij.append(sij)
         return Sij
 
