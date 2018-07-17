@@ -120,8 +120,4 @@ The output is given in the ${proj}.rvgdt_output file.
 
 # Questions
 
-If you have any further questions, please fell free to send us an email:
-
-+ Zongxiao He: zongxiah@bcm.edu
-+ Suzanne M. Leal: steal@bcm.edu
-
+If you have any further questions, please fell free to create a issue ticket in github. 
