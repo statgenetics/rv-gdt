@@ -15,9 +15,9 @@ from RVGDT.disequilibrium_test import *
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = """Rare Variant Extesnion of the Generalized Disequilibrium Test""",
 		                                    epilog = textwrap.dedent("""
-                                            Copyright: Zongxiao He (zongxiah@bcm.edu) and Suzanne Leal (sleal@bcm.edu)
+                                            Copyright: Zongxiao He (hezongxiao@gmail.com) and Suzanne Leal (sleal@bcm.edu)
                                             Required Environment: Python 2.7 + NumPy 1.11 + SciPy 0.16 or Anaconda 2.3
-                                            Please cite XXXX if you find variant tools helpful and use it in your publication.
+                                            Please cite the paper if you find variant tools helpful and use it in your publication.
                                             """),
                                             prog = 'rvgdt',
                                             usage='%(prog)s [-h]',
